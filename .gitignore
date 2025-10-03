@@ -1,0 +1,18 @@
+# Node modules
+node_modules/
+*/node_modules/
+
+# Environment variables
+.env
+*/.env
+
+# Uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
