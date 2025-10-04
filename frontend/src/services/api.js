@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://nh-backend-y59e.onrender.com/api';
 
 // Crear instancia de axios
 const api = axios.create({
