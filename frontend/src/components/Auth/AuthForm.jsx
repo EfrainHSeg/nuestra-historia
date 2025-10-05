@@ -83,7 +83,7 @@ const AuthForm = ({ onLogin }) => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                placeholder="Ej: María"
+                placeholder="Ingresa tu nombre completo"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
                 required
               />
@@ -97,7 +97,7 @@ const AuthForm = ({ onLogin }) => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Ej: maria123"
+              placeholder="Nombre de usuario"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
             />
@@ -110,7 +110,7 @@ const AuthForm = ({ onLogin }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="••••••••"
+              placeholder="Ingresa tu contraseña"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
               required
               minLength="6"
