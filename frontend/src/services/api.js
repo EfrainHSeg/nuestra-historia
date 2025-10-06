@@ -52,7 +52,7 @@ export const memoriesAPI = {
     });
   },
   delete: (id) => api.delete(`/memories/${id}`),
-  toggleLike: (id) => api.post(`/memories/${id}/like`), // NUEVO
+  toggleLike: (id) => api.post(`/memories/${id}/like`),
 };
 
 // ============= SONGS =============

@@ -95,7 +95,7 @@ const MemoriesSection = () => {
 
   const isLikedByCurrentUser = (memory) => {
     const currentUserId = JSON.parse(localStorage.getItem('user'))?._id;
-    return memory.likedBy?.includes(currentUserId);
+    return memory.likedBy && memory.likedBy.includes(currentUserId);
   };
 
   const handleEdit = (memory) => {
@@ -174,14 +174,14 @@ const MemoriesSection = () => {
             <div className="flex items-center space-x-2 mb-2">
               <button
                 onClick={() => handleLike(memory._id)}
-                className="flex items-center space-x-1 group/like transition"
+                className="flex items-center space-x-1 transition"
               >
                 <Heart
                   size={24}
                   className={`transition-all ${
                     isLikedByCurrentUser(memory)
                       ? 'fill-red-500 text-red-500'
-                      : 'text-gray-400 hover:text-red-500'
+                      : 'text-gray-400 hover:text-red-400'
                   }`}
                 />
               </button>
