@@ -2,9 +2,6 @@ import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, X, Upload } from 'lucide-react';
 import { memoriesAPI } from '../../services/api';
 
-// Variable de entorno para la URL del backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 const MemoriesSection = () => {
   const [memories, setMemories] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -91,8 +88,8 @@ const MemoriesSection = () => {
       description: memory.description,
       color: memory.color
     });
-    // ✅ CORREGIDO: Usa la variable API_URL en lugar de localhost hardcodeado
-    setImagePreview(memory.imageUrl ? `${API_URL}${memory.imageUrl}` : null);
+    // Cloudinary devuelve URLs completas
+    setImagePreview(memory.imageUrl);
     setShowModal(true);
   };
 
@@ -142,9 +139,9 @@ const MemoriesSection = () => {
           >
             {memory.imageUrl ? (
               <div className="aspect-square bg-white rounded-lg mb-4 overflow-hidden">
-                {/* ✅ CORREGIDO: Usa la variable API_URL en lugar de localhost hardcodeado */}
+                {/* Cloudinary devuelve URLs completas */}
                 <img
-                  src={`${API_URL}${memory.imageUrl}`}
+                  src={memory.imageUrl}
                   alt={memory.title}
                   className="w-full h-full object-cover"
                 />
