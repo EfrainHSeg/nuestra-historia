@@ -1,28 +1,31 @@
 const mongoose = require('mongoose');
 
-const MemorySchema = new mongoose.Schema({
+const memorySchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'El título es requerido'],
-    trim: true
+    required: true
   },
   description: {
     type: String,
-    required: [true, 'La descripción es requerida'],
-    trim: true
+    required: true
   },
   imageUrl: {
-    type: String,
-    default: null
+    type: String
   },
   color: {
     type: String,
     default: 'bg-pink-100'
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  likes: {
+    type: Number,
+    default: 0
+  },
+  likedBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }]
+}, {
+  timestamps: true
 });
 
-module.exports = mongoose.model('Memory', MemorySchema);
+module.exports = mongoose.model('Memory', memorySchema);

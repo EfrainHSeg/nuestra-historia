@@ -28,6 +28,9 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 });
 
+// @route   GET /api/memories
+// @desc    Obtener todas las memorias
+// @access  Private
 router.get('/', auth, async (req, res) => {
   try {
     const memories = await Memory.find().sort({ createdAt: -1 });
@@ -38,6 +41,9 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// @route   POST /api/memories
+// @desc    Crear nueva memoria con imagen
+// @access  Private
 router.post('/', auth, upload.single('image'), async (req, res) => {
   try {
     const { title, description, color } = req.body;
@@ -63,6 +69,9 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
   }
 });
 
+// @route   PUT /api/memories/:id
+// @desc    Actualizar memoria
+// @access  Private
 router.put('/:id', auth, upload.single('image'), async (req, res) => {
   try {
     const { title, description, color } = req.body;
@@ -90,6 +99,41 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
   }
 });
 
+// @route   POST /api/memories/:id/like
+// @desc    Dar/quitar like a una memoria
+// @access  Private
+router.post('/:id/like', auth, async (req, res) => {
+  try {
+    const memory = await Memory.findById(req.params.id);
+
+    if (!memory) {
+      return res.status(404).json({ error: 'Memoria no encontrada' });
+    }
+
+    const userId = req.user.id;
+    const likedIndex = memory.likedBy.indexOf(userId);
+
+    if (likedIndex > -1) {
+      // Ya le dio like, entonces quitarlo
+      memory.likedBy.splice(likedIndex, 1);
+      memory.likes = Math.max(0, memory.likes - 1);
+    } else {
+      // Agregar like
+      memory.likedBy.push(userId);
+      memory.likes += 1;
+    }
+
+    await memory.save();
+    res.json(memory);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+});
+
+// @route   DELETE /api/memories/:id
+// @desc    Eliminar memoria
+// @access  Private
 router.delete('/:id', auth, async (req, res) => {
   try {
     const memory = await Memory.findByIdAndDelete(req.params.id);
