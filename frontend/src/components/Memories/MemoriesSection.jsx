@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, X, Upload } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Upload, Heart } from 'lucide-react';
 import { memoriesAPI } from '../../services/api';
 
 const MemoriesSection = () => {
@@ -81,6 +81,23 @@ const MemoriesSection = () => {
     }
   };
 
+  const handleLike = async (memoryId) => {
+    try {
+      const response = await memoriesAPI.toggleLike(memoryId);
+      // Actualizar la memoria en el estado local
+      setMemories(memories.map(mem => 
+        mem._id === memoryId ? response.data : mem
+      ));
+    } catch (error) {
+      console.error('Error al dar like:', error);
+    }
+  };
+
+  const isLikedByCurrentUser = (memory) => {
+    const currentUserId = JSON.parse(localStorage.getItem('user'))?._id;
+    return memory.likedBy?.includes(currentUserId);
+  };
+
   const handleEdit = (memory) => {
     setEditingMemory(memory);
     setFormData({
@@ -88,7 +105,6 @@ const MemoriesSection = () => {
       description: memory.description,
       color: memory.color
     });
-    // Cloudinary devuelve URLs completas
     setImagePreview(memory.imageUrl);
     setShowModal(true);
   };
@@ -139,7 +155,6 @@ const MemoriesSection = () => {
           >
             {memory.imageUrl ? (
               <div className="aspect-square bg-white rounded-lg mb-4 overflow-hidden">
-                {/* Cloudinary devuelve URLs completas */}
                 <img
                   src={memory.imageUrl}
                   alt={memory.title}
@@ -153,7 +168,29 @@ const MemoriesSection = () => {
             )}
             
             <h3 className="text-xl font-bold text-gray-800 mb-2">{memory.title}</h3>
-            <p className="text-gray-700">{memory.description}</p>
+            <p className="text-gray-700 mb-3">{memory.description}</p>
+
+            {/* Botón de Me encanta */}
+            <div className="flex items-center space-x-2 mb-2">
+              <button
+                onClick={() => handleLike(memory._id)}
+                className="flex items-center space-x-1 group/like transition"
+              >
+                <Heart
+                  size={24}
+                  className={`transition-all ${
+                    isLikedByCurrentUser(memory)
+                      ? 'fill-red-500 text-red-500'
+                      : 'text-gray-400 hover:text-red-500'
+                  }`}
+                />
+              </button>
+              {memory.likes > 0 && (
+                <span className="text-sm text-gray-600 font-semibold">
+                  {memory.likes} {memory.likes === 1 ? 'me encanta' : 'les encanta'}
+                </span>
+              )}
+            </div>
 
             {/* Botones de acción */}
             <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100 transition">
